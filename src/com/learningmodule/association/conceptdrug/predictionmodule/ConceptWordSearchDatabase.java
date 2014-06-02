@@ -27,7 +27,8 @@ public class ConceptWordSearchDatabase {
 				ResultSet rs = stat.executeQuery("SELECT concept_word.concept_id "
 						+ "FROM openmrs.concept_word WHERE concept_word.word IN ( "
 						+ getWords(query) + ") GROUP BY concept_word.concept_id "
-						+ "ORDER BY sum(concept_word.weight) DESC;");
+						+ "ORDER BY count(concept_word.concept_word_id) desc,"
+						+ " sum(concept_word.weight) DESC;");
 
 				// create a list of ConceptIDs
 				LinkedList<Integer> data = new LinkedList<Integer>();
@@ -70,9 +71,8 @@ public class ConceptWordSearchDatabase {
 		try {
 			// get the connection with the database
 			PropertiesReader.load();
-			connection = DriverManager.getConnection(
-					PropertiesReader.getUrl(), PropertiesReader.getUser(),
-					PropertiesReader.getPassword());
+			connection = DriverManager.getConnection(PropertiesReader.getUrl(),
+					PropertiesReader.getUser(), PropertiesReader.getPassword());
 			System.out.println("MySQL JDBC Driver Registered!");
 		} catch (SQLException e) {
 			System.out.println("Connection Failed! Check output console");
@@ -93,7 +93,7 @@ public class ConceptWordSearchDatabase {
 	public static void main(String[] args) {
 		makeConnection();
 		Iterator<Integer> it = search("ASTHMA NOS").iterator();
-		while(it.hasNext()) {
+		while (it.hasNext()) {
 			System.out.println(it.next());
 		}
 		closeConnection();

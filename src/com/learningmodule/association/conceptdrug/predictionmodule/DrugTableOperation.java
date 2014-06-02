@@ -20,6 +20,7 @@ public class DrugTableOperation {
 
 	// method to get the list of Drugs details from database of given drugIDs
 	public static LinkedList<DrugModel> search(LinkedList<Integer> drugIds) {
+		LinkedList<DrugModel> data = new LinkedList<DrugModel>();
 		if (isConnected() && !drugIds.isEmpty()) {
 			try {
 				Statement stat = connection.createStatement();
@@ -29,19 +30,19 @@ public class DrugTableOperation {
 						+ "from openmrs.drug where drug.drug_id in ( " + getWords(drugIds) + ");");
 
 				// create a linked list of Drugs
-				LinkedList<DrugModel> data = new LinkedList<DrugModel>();
+				
 				while (rs.next()) {
 					data.add(new DrugModel(rs.getString(2), rs.getString(3), rs.getString(4), rs
 							.getInt(5), rs.getInt(1)));
 				}
-				return data;
+				
 			} catch (SQLException e1) {
 				e1.printStackTrace();
 			}
 		} else {
-			System.out.println("connection lost! OR list of Drug IDs empty");
+			System.out.println("connection lost! OR list of Drug IDs empty = " + drugIds.isEmpty());
 		}
-		return null;
+		return data;
 	}
 
 	private static String getWords(LinkedList<Integer> drugIds) {

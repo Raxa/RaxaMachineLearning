@@ -33,6 +33,18 @@ public class PredictionMatrix implements Serializable {
 		return null;
 	}
 
+	public LinkedList<Integer> getNonEmptyConcepts() {
+		Enumeration<Integer> temp = rows.keys();
+		LinkedList<Integer> result = new LinkedList<Integer>();
+		while(temp.hasMoreElements()) {
+			Integer key = temp.nextElement();
+			if(!getDrugs(key).isEmpty()) {
+				result.add(key);
+			}
+		}
+		return result;
+	}
+	
 	/*
 	 * method to add a new cell to Prediction matrix
 	 */

@@ -43,11 +43,24 @@ public class PredictionMethod {
 		return DrugTableOperation.search(results);
 	}
 
+	public static void getAllConceptsInMatrix() {
+		PredictionMatrix matrix = ConceptDrugLearning.getMatrix();
+		LinkedList<Integer> conceptIds = matrix.getNonEmptyConcepts();
+		String str = "( ";
+		Iterator<Integer> itr = conceptIds.iterator();
+		while(itr.hasNext()) {
+			str = str + itr.next() + ", ";
+		}
+		str = str + ")";
+		System.out.println(str);
+	}
+	
 	public static void main(String[] args) {
-		LinkedList<DrugModel> temp = predict("ASTHMA");
+		LinkedList<DrugModel> temp = predict("BLOOD LOSS");
 		Iterator<DrugModel> itr = temp.iterator();
 		while(itr.hasNext()) {
 			System.out.println(itr.next());
 		}
+		//getAllConceptsInMatrix();
 	}
 }
