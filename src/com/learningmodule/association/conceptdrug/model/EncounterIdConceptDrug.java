@@ -1,5 +1,8 @@
 package com.learningmodule.association.conceptdrug.model;
 
+/*
+ * class that represent a Encounter with obs(concept id) and Drug(drug id)
+ */
 public class EncounterIdConceptDrug {
 	private int id;
 	private int drug, conceptId;
