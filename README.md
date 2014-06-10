@@ -14,7 +14,7 @@ Dependancies
 Setup Procedure
 ====================
 
-1) import the project as Web application
+1) import the project as Web application.
 2) create file database.properties in root folder(RaxaMachineLearning/database.properties) with following format
 
 	databaseURL=<database URL>
