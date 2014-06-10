@@ -4,9 +4,11 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 
+import com.database.PropertiesReader;
 import com.learningmodule.association.conceptdrug.model.PredictionMatrix;
 
 import weka.associations.ItemSet;
@@ -25,12 +27,13 @@ public class PostProcessing {
 	 */
 	public static void save(FastVector[] allRules, Instances instances) {
 		try {
-			FileOutputStream saveFile = new FileOutputStream("rules");
+			String path = PostProcessing.class.getResource("/files/rules").getFile();
+			FileOutputStream saveFile = new FileOutputStream(path);
 			ObjectOutputStream save = new ObjectOutputStream(saveFile);
 			save.writeObject(allRules);
 			save.close();
 			
-			saveFile = new FileOutputStream("instances");
+			saveFile = new FileOutputStream("WebContent/WEB-INF/instances");
 			save = new ObjectOutputStream(saveFile);
 			save.writeObject(instances);
 			save.close();
@@ -48,7 +51,8 @@ public class PostProcessing {
 	 */
 	private static void saveResults(PredictionMatrix matrix) {
 		try {
-			FileOutputStream saveFile = new FileOutputStream("results");
+			String path = PostProcessing.class.getResource("/files/results").getFile();
+			FileOutputStream saveFile = new FileOutputStream(path);
 			ObjectOutputStream save = new ObjectOutputStream(saveFile);
 			save.writeObject(matrix);
 			save.close();
@@ -66,7 +70,7 @@ public class PostProcessing {
 	 */
 	public static FastVector[] readRules() {
 		try {
-			FileInputStream saveFile = new FileInputStream("rules");
+			InputStream saveFile = PostProcessing.class.getClassLoader().getResourceAsStream("files/rules");
 			ObjectInputStream restore = new ObjectInputStream(saveFile);
 			FastVector[] obj = (FastVector[]) restore.readObject();
 			restore.close();
@@ -89,7 +93,7 @@ public class PostProcessing {
 	 */
 	public static Instances readInstances() {
 		try {
-			FileInputStream saveFile = new FileInputStream("instances");
+			InputStream saveFile = PostProcessing.class.getClassLoader().getResourceAsStream("files/instances");
 			ObjectInputStream restore = new ObjectInputStream(saveFile);
 			Instances obj = (Instances) restore.readObject();
 			restore.close();

@@ -4,9 +4,9 @@ package com.learningmodule.association.conceptdrug.learning;
  * Class used for finding association rules between the observations and drugs.
  */
 
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.ObjectInputStream;
 
 import com.learningmodule.association.conceptdrug.model.PredictionMatrix;
@@ -39,7 +39,7 @@ public class ConceptDrugLearning {
 	 */
 	public static PredictionMatrix readResults() {
 		try {
-			FileInputStream saveFile = new FileInputStream("results");
+			InputStream saveFile = ConceptDrugLearning.class.getClassLoader().getResourceAsStream("files/results");
 			ObjectInputStream restore = new ObjectInputStream(saveFile);
 			PredictionMatrix obj = (PredictionMatrix) restore.readObject();
 			restore.close();
@@ -84,10 +84,11 @@ public class ConceptDrugLearning {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		System.out.println("learned");
 		return;
 	}
 	public static void main(String args[]) {
-		DrugConceptDataCollector.makeConnection();
+		//DrugConceptDataCollector.makeConnection();
 		learn();
 	}
 }

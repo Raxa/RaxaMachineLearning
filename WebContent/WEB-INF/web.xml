@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app>
+	<servlet>
+		<servlet-name>raxaSearch</servlet-name>
+		<servlet-class>com.machine.learning.socket</servlet-class>
+	</servlet>
+</web-app>

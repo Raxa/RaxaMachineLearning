@@ -1,14 +1,12 @@
 package com.learningmodule.association.conceptdrug.predictionmodule;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.Iterator;
 import java.util.LinkedList;
 
-import com.database.PropertiesReader;
+import com.database.DatabaseConnector;
 
 /*
  * class to get list concept IDs for given word from the database
@@ -16,13 +14,11 @@ import com.database.PropertiesReader;
 
 public class ConceptWordSearchDatabase {
 
-	private static Connection connection = null;
-
 	// method to get the list of concept IDs for given search query
 	public static LinkedList<Integer> search(String query) {
-		if (isConnected()) {
+		if (DatabaseConnector.getConnection() != null) {
 			try {
-				Statement stat = connection.createStatement();
+				Statement stat = DatabaseConnector.getConnection().createStatement();
 				// execute the SQL query
 				ResultSet rs = stat.executeQuery("SELECT concept_word.concept_id "
 						+ "FROM openmrs.concept_word WHERE concept_word.word IN ( "
@@ -54,48 +50,10 @@ public class ConceptWordSearchDatabase {
 		return str;
 	}
 
-	public static boolean isConnected() {
-		if (connection != null) {
-			try {
-				return !connection.isClosed();
-			} catch (SQLException e) {
-				e.printStackTrace();
-			}
-			return true;
-		}
-		return false;
-	}
-
-	public static void makeConnection() {
-
-		try {
-			// get the connection with the database
-			PropertiesReader.load();
-			connection = DriverManager.getConnection(PropertiesReader.getUrl(),
-					PropertiesReader.getUser(), PropertiesReader.getPassword());
-			System.out.println("MySQL JDBC Driver Registered!");
-		} catch (SQLException e) {
-			System.out.println("Connection Failed! Check output console");
-			e.printStackTrace();
-			return;
-		}
-	}
-
-	public static void closeConnection() {
-		try {
-			connection.close();
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-	}
-
 	public static void main(String[] args) {
-		makeConnection();
 		Iterator<Integer> it = search("ASTHMA NOS").iterator();
 		while (it.hasNext()) {
 			System.out.println(it.next());
 		}
-		closeConnection();
 	}
 }

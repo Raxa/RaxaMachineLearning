@@ -15,11 +15,9 @@ import com.learningmodule.association.conceptdrug.model.PredictionMatrix;
 public class PredictionMethod {
 	public static LinkedList<DrugModel> predict(String query) {
 		LinkedList<Integer> results = new LinkedList<Integer>();
-		ConceptWordSearchDatabase.makeConnection();
 		
 		// get the list of concepts IDs from the search query
 		LinkedList<Integer> conceptIds = ConceptWordSearchDatabase.search(query);
-		ConceptWordSearchDatabase.closeConnection();
 		PredictionMatrix matrix = ConceptDrugLearning.getMatrix();
 		Iterator<Integer> concepts = conceptIds.iterator();
 		while (concepts.hasNext()) {
@@ -37,7 +35,6 @@ public class PredictionMethod {
 				}
 			}
 		}
-		DrugTableOperation.makeConnection();
 		
 		// get the linked list of drugs from result drugIDs
 		return DrugTableOperation.search(results);
@@ -56,11 +53,12 @@ public class PredictionMethod {
 	}
 	
 	public static void main(String[] args) {
-		LinkedList<DrugModel> temp = predict("BLOOD LOSS");
+		LinkedList<DrugModel> temp = predict("BLOOD loss");
 		Iterator<DrugModel> itr = temp.iterator();
 		while(itr.hasNext()) {
 			System.out.println(itr.next());
 		}
+		
 		//getAllConceptsInMatrix();
 	}
 }

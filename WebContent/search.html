@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Raxa ML Search</title>
+</head>
+<script type="text/javascript">
+	var ws = null;
+	function sendMsg() {
+		console.log("changed")
+		var message = document.getElementById("query").value;
+		if (ws != null) {
+			ws.send('query:' + message);
+		}
+	}
+	function learn() {
+		
+		if (ws != null) {
+			ws.send('learn:');
+		}
+	}
+	function connect() {
+
+		if ("WebSocket" in window) {
+			console.log("WebSocket is supported by your Browser!");
+			// Let us open a web socket
+			ws = new WebSocket("ws://" + window.location.host + "/RaxaMachineLearning/ml/search");
+			ws.onopen = function() {
+				// Web Socket is connected, send data using send()
+				console.log("connected");
+			};
+			ws.onmessage = function(evt) {
+				var msg = evt.data;
+				//console.log("Message is received... \n" + msg);
+				document.getElementById("results").innerHTML = msg;
+			};
+			ws.onclose = function() {
+				// websocket is closed.
+				console.log("Connection is closed...");
+			};
+		} else {
+			// The browser doesn't support WebSocket
+			alert("WebSocket NOT supported by your Browser!");
+		}
+	}
+</script>
+</head>
+<body onload="connect()">
+	<input type="text" size="25" id="query" onkeydown="sendMsg()">
+	<button id="learn" onclick="learn()">
+		Learn
+	</button>
+	<p id="results"></p>
+</body>
+</html>

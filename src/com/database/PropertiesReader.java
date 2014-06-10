@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
 
+
 /*
  * class to used to read the database properties from file "database.properties"
  */
@@ -40,8 +41,7 @@ public class PropertiesReader {
 		InputStream input = null;
 
 		try {
-
-			input = new FileInputStream("database.properties");
+			input = PropertiesReader.class.getClassLoader().getResourceAsStream("config/database.properties");
 
 			// load a properties file
 			prop.load(input);
