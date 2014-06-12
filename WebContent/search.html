@@ -30,9 +30,9 @@
 				console.log("connected");
 			};
 			ws.onmessage = function(evt) {
-				var msg = evt.data;
+				var msg = JSON.parse(evt.data);
 				//console.log("Message is received... \n" + msg);
-				document.getElementById("results").innerHTML = msg;
+				printResults(msg.results)
 			};
 			ws.onclose = function() {
 				// websocket is closed.
@@ -43,6 +43,14 @@
 			alert("WebSocket NOT supported by your Browser!");
 		}
 	}
+	function printResults(result) {
+		console.log(result);
+		var str = "";
+		for(var i=0;i<result.length;i++) {
+			str = str + "<div> Drug Name: " + result[i].name + ", Drug Generic: " + result[i].generic + "</div>"
+		}
+		document.getElementById("results").innerHTML = str;
+	}
 </script>
 </head>
 <body onload="connect()">
@@ -50,6 +58,7 @@
 	<button id="learn" onclick="learn()">
 		Learn
 	</button>
+	<h2>Results</h2>
 	<p id="results"></p>
 </body>
 </html>

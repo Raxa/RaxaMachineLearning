@@ -9,6 +9,7 @@ import javax.websocket.OnOpen;
 import javax.websocket.Session;
 import javax.websocket.server.ServerEndpoint;
 
+import com.google.gson.Gson;
 import com.learningmodule.association.conceptdrug.learning.ConceptDrugLearning;
 import com.learningmodule.association.conceptdrug.model.DrugModel;
 import com.learningmodule.association.conceptdrug.predictionmodule.PredictionMethod;
@@ -16,6 +17,7 @@ import com.learningmodule.association.conceptdrug.predictionmodule.PredictionMet
 @ServerEndpoint(value = "/ml/search")
 public class SearchSocket {
 
+	private Gson gson = new Gson();
 	private Session session;
 
 	@OnOpen
@@ -70,10 +72,10 @@ public class SearchSocket {
 	}
 
 	private String getJson(DrugModel[] list) {
-		String result = "";
-		for (int i = 0; i < list.length; i++) {
-			result = result + "<div>" + list[i].toString() + "</div>";
-		}
+		String result = "{\"results\":";
+			result = result + gson.toJson(list);
+		
+		result = result + "}";
 		System.out.println(result);
 		return result;
 	}
