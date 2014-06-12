@@ -1,6 +1,5 @@
 package com.learningmodule.association.conceptdrug.learning;
 
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -8,7 +7,6 @@ import java.io.InputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 
-import com.database.PropertiesReader;
 import com.learningmodule.association.conceptdrug.model.PredictionMatrix;
 
 import weka.associations.ItemSet;

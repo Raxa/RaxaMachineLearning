@@ -1,8 +1,6 @@
 package com.machine.learning.socket;
 
 import java.io.IOException;
-import java.util.Iterator;
-import java.util.LinkedList;
 
 import javax.websocket.OnClose;
 import javax.websocket.OnError;
@@ -32,18 +30,24 @@ public class SearchSocket {
 
 	@OnMessage
 	public void onMsg(String query) {
-		String[] strings = query.split(":");
+		final String[] strings = query.split(":");
 		System.out.println(query);
-		if(strings[0].equals("query") && strings.length > 1) {
-		
-		sendResults(strings[1]);
-		} else if(strings[0].equals("learn")) {
+		if (strings[0].equals("query") && strings.length > 1) {
 			new Thread(new Runnable() {
-				
+
+				@Override
+				public void run() {
+					sendResults(strings[1]);
+				}
+			}).run();
+
+		} else if (strings[0].equals("learn")) {
+			new Thread(new Runnable() {
+
 				@Override
 				public void run() {
 					ConceptDrugLearning.learn();
-					
+
 				}
 			}).run();
 		}
@@ -65,11 +69,10 @@ public class SearchSocket {
 		t.printStackTrace();
 	}
 
-	private String getJson(LinkedList<DrugModel> list) {
-		Iterator<DrugModel> itr = list.iterator();
+	private String getJson(DrugModel[] list) {
 		String result = "";
-		while (itr.hasNext()) {
-			result = result + "<div>" + itr.next().toString() + "</div>";
+		for (int i = 0; i < list.length; i++) {
+			result = result + "<div>" + list[i].toString() + "</div>";
 		}
 		System.out.println(result);
 		return result;

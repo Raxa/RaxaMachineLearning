@@ -54,7 +54,7 @@ public class PredictionMatrix implements Serializable {
 		}
 		rows.get(concept).addCell(drug, conf);
 	}
-
+	
 	@Override
 	public String toString() {
 		String result = "";
