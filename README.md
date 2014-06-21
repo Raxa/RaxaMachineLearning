@@ -19,9 +19,9 @@ Setup Procedure
 1. Import the project as Web application.
 2. Create file database.properties in root folder(RaxaMachineLearning/database.properties) with following format
 
-	databaseURL=<database URL>
-	dbUser=<database username>
-	dbPassword=<database password>
+	`databaseURL=<database URL>`
+	`dbUser=<database username>`
+	`dbPassword=<database password>`
 
 Learning from database
 ===================
