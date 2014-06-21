@@ -12,8 +12,10 @@ public class ConceptRow implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
-	// each row contain conceptId and a linkedlist of cells
+	// linkedlist of cells contains drugId and confidence
 	private LinkedList<Cell> cellList = new LinkedList<Cell>();
+	
+	// conceptId
 	private int concept;
 
 	public ConceptRow(int concept) {

@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
 
-
 /*
  * class to used to read the database properties from file "database.properties"
  */
@@ -14,7 +13,7 @@ public class PropertiesReader {
 	private static String user = null;
 	private static String password = null;
 	private static String url = null;
-	
+
 	// method to get the UserId of database
 	public static String getUser() {
 		return user;
@@ -33,14 +32,15 @@ public class PropertiesReader {
 	/*
 	 * method to load the database properties
 	 */
-	
+
 	public static void load() {
 
 		Properties prop = new Properties();
 		InputStream input = null;
 
 		try {
-			input = PropertiesReader.class.getClassLoader().getResourceAsStream("config/database.properties");
+			input = PropertiesReader.class.getClassLoader().getResourceAsStream(
+					"config/database.properties");
 
 			// load a properties file
 			prop.load(input);
@@ -62,9 +62,9 @@ public class PropertiesReader {
 			}
 		}
 	}
-	
+
 	public static void main(String[] args) {
 		load();
-		System.out.println(getUrl() + ", " +  getUser() + ", " + getPassword());
+		System.out.println(getUrl() + ", " + getUser() + ", " + getPassword());
 	}
 }

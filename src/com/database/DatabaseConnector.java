@@ -4,9 +4,16 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 
+/*
+ * Class that implements the methods related to the database connection
+ */
+
 public class DatabaseConnector {
 	private static Connection connection = null;
-
+	
+	/*
+	 * make connection as soon as the class is loaded
+	 */
 	static {
 		makeConnection();
 	}
@@ -34,7 +41,7 @@ public class DatabaseConnector {
 	}
 
 	/*
-	 * method to check if its connected
+	 * method to check if database is connected
 	 */
 	public static boolean isConnected() {
 		if (connection != null) {

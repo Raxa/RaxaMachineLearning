@@ -45,10 +45,16 @@
 	}
 	function printResults(result) {
 		console.log(result);
-		var str = "";
+		var str = "<ul>";
 		for(var i=0;i<result.length;i++) {
-			str = str + "<div> Drug Name: " + result[i].name + ", Drug Generic: " + result[i].generic + "</div>"
+			str = str + "<li><div> Drug Name: <b>" + result[i].drug.name + "</b>, Drug Generic: <b>" + result[i].drug.generic + "</b></div><div>Tags: "
+			str = str + "<u>" + result[i].tags[0] + "</u>";
+			for(var j=1;j<result[i].tags.length;j++) {
+				str = str + ", <u>" + result[i].tags[j] + "</u>";
+			}
+			str = str + "</div></li>";
 		}
+		str = str + "</ul>"
 		document.getElementById("results").innerHTML = str;
 	}
 </script>

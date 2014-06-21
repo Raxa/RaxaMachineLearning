@@ -4,14 +4,27 @@ package com.learningmodule.association.conceptdrug.model;
  * class that represent a drug object which will be sent as result of search query
  */
 public class DrugModel {
+	
+	// name of drug
 	private String name;
+	
+	// generic od drug
 	private String generic;
+	
+	// uuid of drug
 	private String uuid;
+	
+	// commercial Id of drug
 	private int drugCommercialId;
+	
+	// drug Id
 	private int drugId;
 
+	public DrugModel(int drugId) {
+		this.drugId = drugId;
+	}
+	
 	public DrugModel(String name, String generic, String uuid, int drugCommercialId, int drugId) {
-		super();
 		this.name = name;
 		this.generic = generic;
 		this.uuid = uuid;

@@ -3,13 +3,11 @@ package com.learningmodule.association.conceptdrug.predictionmodule;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.Iterator;
 import java.util.LinkedList;
 
 import com.database.DatabaseConnector;
-import com.learningmodule.association.conceptdrug.model.ConceptRow;
-import com.learningmodule.association.conceptdrug.model.ConceptRow.Cell;
 import com.learningmodule.association.conceptdrug.model.DrugModel;
+import com.learningmodule.association.conceptdrug.model.PredictionResults;
 
 /*
  * class to fetch the drug data from database
@@ -18,24 +16,27 @@ import com.learningmodule.association.conceptdrug.model.DrugModel;
 public class DrugTableOperation {
 
 	// method to get the list of Drugs details from database of given drugIDs
-	public static DrugModel[] search(LinkedList<Cell> drugs) {
+	public static LinkedList<PredictionResults> search(LinkedList<PredictionResults> drugs) {
 
-		DrugModel data[] = new DrugModel[drugs.size()];
 		if (DatabaseConnector.getConnection() != null && !drugs.isEmpty()) {
 			try {
 				Statement stat = DatabaseConnector.getConnection().createStatement();
-				// execute the SQL query
+				// execute the SQL query to get drug related info for given drug
+				// Ids
 				ResultSet rs = stat.executeQuery("SELECT drug.drug_id, "
 						+ "drug.name, drug.generic_name, drug.uuid, drug.drug_commercial_id "
 						+ "from openmrs.drug where drug.drug_id in ( " + getWords(drugs) + ");");
-
-				int idx = 0;
-				// create a linked list of Drugs
+				// for every drugId from results of query
 				while (rs.next()) {
-					idx = findIndexOfDrugIdInSortedList(drugs, rs.getInt(1));
-					if (idx != -1) {
-						data[idx] = new DrugModel(rs.getString(2), rs.getString(3),
-								rs.getString(4), rs.getInt(5), rs.getInt(1));
+					
+					// search for drugId in drug results
+					for (PredictionResults drug : drugs) {
+						if (drug.getDrug().getDrugId() == rs.getInt(1)) {
+							
+							// set the drug info in the drug result
+							drug.setDrug(new DrugModel(rs.getString(2), rs.getString(3), rs
+									.getString(4), rs.getInt(5), rs.getInt(1)));
+						}
 					}
 				}
 
@@ -45,38 +46,27 @@ public class DrugTableOperation {
 		} else {
 			System.out.println("connection lost! OR list of Drug IDs empty = " + drugs.isEmpty());
 		}
-		return data;
+		return drugs;
 	}
 
-	private static String getWords(LinkedList<Cell> drugs) {
-		Iterator<Cell> id = drugs.iterator();
-		String str = " '" + id.next().getDrug() + "'";
-		while (id.hasNext()) {
-			str = str + ", '" + id.next().getDrug() + "'";
+	// create the string of drugIds separated by comma that will put in sql query 
+	private static String getWords(LinkedList<PredictionResults> drugs) {
+
+		String str = "";
+		for (PredictionResults drug : drugs) {
+			str = str + drug.getDrug().getDrugId() + ", ";
 		}
+		str = str + "0";
 		return str;
 	}
 
-	private static int findIndexOfDrugIdInSortedList(LinkedList<Cell> drugs, int drugId) {
-		int count = 0;
-		Iterator<Cell> itr = drugs.iterator();
-		while (itr.hasNext()) {
-			if (itr.next().getDrug() == drugId) {
-				return count;
-			}
-			count++;
-		}
-		return -1;
-	}
-
 	public static void main(String[] args) {
-		ConceptRow row = new ConceptRow(1);
-		row.addCell(3000463, 0.8);
-		row.addCell(3000472, 0.7);
-		DrugModel[] tmp = search(row.getDrugs());
-
-		for (int i = 0; i < tmp.length; i++) {
-			System.out.println(tmp[i]);
+		LinkedList<PredictionResults> rows = new LinkedList<>();
+		rows.add(new PredictionResults(3000463, 0.8));
+		rows.add(new PredictionResults(3000472, 0.7));
+		rows = search(rows);
+		for (PredictionResults row : rows) {
+			System.out.println(row.toString());
 		}
 	}
 }

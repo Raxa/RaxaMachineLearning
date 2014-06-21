@@ -31,7 +31,8 @@ public class PostProcessing {
 			save.writeObject(allRules);
 			save.close();
 			
-			saveFile = new FileOutputStream("WebContent/WEB-INF/instances");
+			path = PostProcessing.class.getResource("/files/instances").getFile();
+			saveFile = new FileOutputStream(path);
 			save = new ObjectOutputStream(saveFile);
 			save.writeObject(instances);
 			save.close();
