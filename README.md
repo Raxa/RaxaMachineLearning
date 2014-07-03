@@ -7,20 +7,23 @@ This project includes set of tools to develop Machine Learning System for Electr
 Dependancies
 ====================
 
-1) Weka - Machine learning library used.
-2) MySQL JDBC connector 5.1.30
+* Weka - Machine learning library used.
+* MySQL JDBC connector 5.1.30
+* Tomcat 7.0.53 or greater
+* Gson
 
 
 Setup Procedure
 ====================
 
-1) import the project as Web application.
-2) create file database.properties in root folder(RaxaMachineLearning/database.properties) with following format
+1. Import the project as Web application.
+2. Create file database.properties in root folder(RaxaMachineLearning/database.properties) with following format.
 
-	databaseURL=<database URL>
-	dbUser=<database username>
-	dbPassword=<database password>
-
+~~~~~~~~~~
+   databaseURL="database URL"
+   dbUser="database username"
+   dbPassword="database password"
+~~~~~~~~~~
 Learning from database
 ===================
 
