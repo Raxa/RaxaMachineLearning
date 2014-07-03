@@ -30,24 +30,27 @@ public class ConceptRow implements Serializable {
 		Cell cell = getCellWithId(drug);
 		if(cell != null) {
 			double conf = cell.getConfidence();
-			cell.setConfidence(conf + confidence + (conf*confidence));
+			cell.setConfidence(conf + confidence - (conf*confidence));
 		}
 		else cellList.add(new Cell(drug, confidence));
 	}
 	
 	public Cell getCellWithId(int drug) {
-		Iterator<Cell> itr = cellList.iterator();
-		while (itr.hasNext()) {
-			Cell temp = itr.next();
-			if(temp.getDrug() == drug) {
-				return temp;
+		for(Cell cell: cellList) {
+			
+			if(cell.getDrug() == drug) {
+				return cell;
 			}
 		}
 		return null;
 	}
 	
 	public LinkedList<Cell> getDrugs() {
-		return cellList;
+		LinkedList<Cell> drugs = new LinkedList<Cell>();
+		for(Cell drug: cellList) {
+			drugs.add(new Cell(drug.getDrug(), drug.getConfidence()));
+		}
+		return drugs;
 	}
 
 	@Override

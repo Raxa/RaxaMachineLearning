@@ -1,4 +1,4 @@
-package com.raxa.string.search;
+package com.learningmodule.association.conceptdrug.search;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -6,6 +6,7 @@ import java.sql.Statement;
 import java.util.LinkedList;
 
 import com.database.DatabaseConnector;
+import com.learningmodule.association.conceptdrug.model.ConceptWordModel;
 
 /*
  * Class that implements the method to get the all the concept words and respective conceptId's from database

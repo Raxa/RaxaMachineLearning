@@ -4,13 +4,16 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 
+import org.apache.log4j.Logger;
+
+
 /*
  * Class that implements the methods related to the database connection
  */
 
 public class DatabaseConnector {
 	private static Connection connection = null;
-	
+	private static Logger log = Logger.getLogger(DatabaseConnector.class);
 	/*
 	 * make connection as soon as the class is loaded
 	 */
@@ -30,13 +33,15 @@ public class DatabaseConnector {
 			connection = DriverManager.getConnection(PropertiesReader.getUrl(),
 					PropertiesReader.getUser(), PropertiesReader.getPassword());
 			System.out.println("MySQL JDBC Driver Registered!");
+			log.debug("MySQL JDBC Driver Registered!");
 		} catch (SQLException e) {
 			System.out.println("Connection Failed! Check output console");
 			e.printStackTrace();
+			log.fatal(e);
 			return;
 		} catch (ClassNotFoundException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
+			log.fatal(e);
 		}
 	}
 
@@ -64,6 +69,7 @@ public class DatabaseConnector {
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+			log.error(e);
 		}
 	}
 

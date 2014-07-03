@@ -1,8 +1,9 @@
-package com.raxa.string.search;
+package com.learningmodule.association.conceptdrug.search;
 
 import java.util.LinkedList;
 
-import com.raxa.datastructure.TrieNode;
+import com.learningmodule.association.conceptdrug.ConceptDrugDatabaseInterface;
+import com.learningmodule.association.conceptdrug.model.ConceptWordModel;
 
 /*
  * Class that implements method to get the Approximate String matches using Levenshtien Distance
@@ -13,14 +14,19 @@ import com.raxa.datastructure.TrieNode;
 public class LevenshteinSearch {
 	private static TrieNode trie;
 
+	private ConceptDrugDatabaseInterface learningInterface;
+	public LevenshteinSearch(ConceptDrugDatabaseInterface learningInterface) {
+		this.learningInterface = learningInterface;
+		makeDictionary();
+	}
 	/*
 	 * Method that will construct the dictionary by getting all the
 	 * concept_words from database
 	 */
-	public static void makeDictionary() {
+	public void makeDictionary() {
 
 		// get the list of words from database
-		LinkedList<ConceptWordModel> names = DatabaseConceptDictionaryCollector.getConceptWords();
+		LinkedList<ConceptWordModel> names = learningInterface.getConceptWords();
 
 		// initialise the rootNode of Trie
 		trie = new TrieNode();
@@ -32,14 +38,14 @@ public class LevenshteinSearch {
 		names.clear();
 	}
 
-	public static void addWordInDictonary(String word, Integer conceptId) {
+	public void addWordInDictonary(String word, Integer conceptId) {
 		trie.insert(word, word, conceptId);
 	}
 
 	/*
 	 * method to search concepts with given string as concept name or words
 	 */
-	public static LinkedList<LevenshteinResults> search(String query, int maxCost) {
+	public LinkedList<LevenshteinResults> search(String query, int maxCost) {
 		if (trie == null) {
 			makeDictionary();
 		}
@@ -77,7 +83,7 @@ public class LevenshteinSearch {
 	/*
 	 * Recusive part of string search that will be used in every node of Trie
 	 */
-	private static LinkedList<LevenshteinResults> searchRecursive(String word, TrieNode node,
+	private LinkedList<LevenshteinResults> searchRecursive(String word, TrieNode node,
 			Character letter, int[] preRow, int maxCost) {
 		LinkedList<LevenshteinResults> results = new LinkedList<LevenshteinResults>();
 		int columns = word.length();
@@ -143,12 +149,12 @@ public class LevenshteinSearch {
 		return min;
 	}
 
-	public static void main(String[] args) {
+	/*public static void main(String[] args) {
 		makeDictionary();
 		LinkedList<LevenshteinResults> temp = search("Asthma", 2);
 		System.out.println(temp.size());
 		for (LevenshteinResults x : temp) {
 			System.out.println(x.getName() + ", " + x.getWeight() + ", " + x.getConcepts().size());
 		}
-	}
+	}*/
 }

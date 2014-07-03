@@ -3,14 +3,17 @@ package com.learningmodule.association.conceptdrug.model;
 import java.util.HashSet;
 import java.util.LinkedList;
 
+import com.learningmodule.association.conceptdrug.AbstractDrugModel;
+import com.learningmodule.association.conceptdrug.PredictionResult;
+
 /*
  * Class that represent the Object that will be sent as a drug 
  * result for concept drug association algorithm.
  */
 
-public class PredictionResults {
+public class ConceptDrugPredictionResult implements PredictionResult {
 	// contains drug info
-	private DrugModel drug;
+	private AbstractDrugModel drug;
 
 	// confidence related to the drug and query
 	private double confidence;
@@ -21,21 +24,27 @@ public class PredictionResults {
 	// conceptsId of concepts drug realted to
 	private HashSet<Integer> conceptIds;
 
-	public PredictionResults(int drug, double confidence) {
+	public ConceptDrugPredictionResult(int drug, double confidence) {
 		this.drug = new DrugModel(drug);
 		this.confidence = confidence;
 		this.conceptIds = new HashSet<Integer>();
 		this.tags = new LinkedList<String>();
 	}
 
-	public DrugModel getDrug() {
+	public AbstractDrugModel getDrug() {
+		return drug;
+	}
+	
+	@Override
+	public Object getValue() {
 		return drug;
 	}
 
-	public void setDrug(DrugModel drug) {
+	public void setDrug(AbstractDrugModel drug) {
 		this.drug = drug;
 	}
 
+	@Override
 	public double getConfidence() {
 		return confidence;
 	}

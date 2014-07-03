@@ -4,6 +4,8 @@ import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.LinkedList;
 
+import org.apache.log4j.Logger;
+
 import weka.core.Attribute;
 import weka.core.FastVector;
 import weka.core.Instances;
@@ -15,6 +17,7 @@ import com.learningmodule.association.conceptdrug.model.EncounterIdConceptDrug;
  * class for preprocessing the data and converting it into form of Instances for Weka.
  */
 public class PreProcessing {
+	private static Logger log = Logger.getLogger(PreProcessing.class);
 
 	public static Instances process(LinkedList<EncounterIdConceptDrug> data) {
 
@@ -132,7 +135,7 @@ public class PreProcessing {
 	}
 
 	public static void main(String args[]) {
-	//	DrugConceptDataCollector.makeConnection();
-		System.out.println(process(DrugConceptDataCollector.getData()));
+		// DrugConceptDataCollector.makeConnection();
+		//System.out.println(process(DrugConceptDataCollector.getData()));
 	}
 }

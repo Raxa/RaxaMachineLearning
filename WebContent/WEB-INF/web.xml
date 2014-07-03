@@ -4,4 +4,7 @@
 		<servlet-name>raxaSearch</servlet-name>
 		<servlet-class>com.machine.learning.socket</servlet-class>
 	</servlet>
+	<listener>
+        <listener-class>com.machine.learning.ModulesContextListener</listener-class>
+    </listener>
 </web-app>

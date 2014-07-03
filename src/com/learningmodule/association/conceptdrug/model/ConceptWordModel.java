@@ -1,4 +1,4 @@
-package com.raxa.string.search;
+package com.learningmodule.association.conceptdrug.model;
 
 /*
  * Model for ConceptId and Concept word pair.

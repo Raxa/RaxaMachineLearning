@@ -1,4 +1,4 @@
-package com.raxa.datastructure;
+package com.learningmodule.association.conceptdrug.search;
 
 import java.io.Serializable;
 import java.util.HashSet;
