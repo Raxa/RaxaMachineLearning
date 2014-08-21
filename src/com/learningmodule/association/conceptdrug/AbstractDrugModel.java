@@ -9,10 +9,10 @@ public interface AbstractDrugModel {
 	/*
 	 * set the Drug Id for this drug
 	 */
-	public void setDrugId(int id);
+	public void setDrugId(String id);
 
 	/*
 	 * get the drug Id for this drug
 	 */
-	public int getDrugId();
+	public String getDrugId();
 }

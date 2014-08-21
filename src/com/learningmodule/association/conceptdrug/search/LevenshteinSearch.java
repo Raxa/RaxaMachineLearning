@@ -2,6 +2,8 @@ package com.learningmodule.association.conceptdrug.search;
 
 import java.util.LinkedList;
 
+import org.apache.log4j.Logger;
+
 import com.learningmodule.association.conceptdrug.ConceptDrugDatabaseInterface;
 import com.learningmodule.association.conceptdrug.model.ConceptWordModel;
 
@@ -12,11 +14,20 @@ import com.learningmodule.association.conceptdrug.model.ConceptWordModel;
  */
 
 public class LevenshteinSearch {
-	private static TrieNode trie;
-
+	
+	// root node of the Trie
+	private TrieNode trie;
+	
+	private Logger log = Logger.getLogger(LevenshteinSearch.class);
+	
+	// database interface to get dictionary for concept words
 	private ConceptDrugDatabaseInterface learningInterface;
+	
+	// constructor for this class
 	public LevenshteinSearch(ConceptDrugDatabaseInterface learningInterface) {
 		this.learningInterface = learningInterface;
+		
+		// make the dictionary when Object is created
 		makeDictionary();
 	}
 	/*
@@ -27,7 +38,8 @@ public class LevenshteinSearch {
 
 		// get the list of words from database
 		LinkedList<ConceptWordModel> names = learningInterface.getConceptWords();
-
+		
+		log.info("dictonary size:" + names.size());
 		// initialise the rootNode of Trie
 		trie = new TrieNode();
 
@@ -38,7 +50,8 @@ public class LevenshteinSearch {
 		names.clear();
 	}
 
-	public void addWordInDictonary(String word, Integer conceptId) {
+	// method to add a concept word with its conceptId in dictionary.
+	public void addWordInDictonary(String word, String conceptId) {
 		trie.insert(word, word, conceptId);
 	}
 

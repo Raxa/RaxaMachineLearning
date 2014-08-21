@@ -2,20 +2,20 @@ package com.learningmodule.association.conceptdrug.model;
 
 public class ConceptNameModel {
 
-	private Integer conceptId;
+	private String conceptId;
 	private String conceptName;
 
-	public ConceptNameModel(Integer conceptId, String conceptName) {
+	public ConceptNameModel(String conceptId, String conceptName) {
 		super();
 		this.conceptId = conceptId;
 		this.conceptName = conceptName;
 	}
 
-	public Integer getConceptId() {
+	public String getConceptId() {
 		return conceptId;
 	}
 
-	public void setConceptId(Integer conceptId) {
+	public void setConceptId(String conceptId) {
 		this.conceptId = conceptId;
 	}
 

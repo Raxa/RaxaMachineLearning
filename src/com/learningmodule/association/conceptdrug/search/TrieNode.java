@@ -23,12 +23,12 @@ public class TrieNode implements Serializable{
 	private Hashtable<Character, TrieNode> children;
 	
 	// HashSet of concepts with this word as
-	private HashSet<Integer> conceptIds;
+	private HashSet<String> conceptIds;
 	
 	public TrieNode() {
 		this.word = null;
 		children = new Hashtable<Character, TrieNode>();
-		conceptIds = new HashSet<Integer>();
+		conceptIds = new HashSet<String>();
 	}
 	
 	public boolean isWord() {
@@ -55,14 +55,14 @@ public class TrieNode implements Serializable{
 		return this.children.keySet();
 	}
 	
-	public Set<Integer> getConcepts() {
+	public Set<String> getConcepts() {
 		return this.conceptIds;
 	}
 	
 	/*
 	 * method to insert a word with suffix at this node
 	 */
-	public void insert(String suffix, String word, Integer conceptId) {
+	public void insert(String suffix, String word, String conceptId) {
 		if(suffix.length() > 0) {
 			if(!children.containsKey(suffix.charAt(0))) {
 				addChild(suffix.charAt(0));

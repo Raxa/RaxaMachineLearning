@@ -16,17 +16,17 @@ public class ConceptRow implements Serializable {
 	private LinkedList<Cell> cellList = new LinkedList<Cell>();
 	
 	// conceptId
-	private int concept;
+	private String concept;
 
-	public ConceptRow(int concept) {
+	public ConceptRow(String concept) {
 		this.concept = concept;
 	}
 
-	public int getConcept() {
+	public String getConcept() {
 		return concept;
 	}
 
-	public void addCell(int drug, double confidence) {
+	public void addCell(String drug, double confidence) {
 		Cell cell = getCellWithId(drug);
 		if(cell != null) {
 			double conf = cell.getConfidence();
@@ -35,10 +35,10 @@ public class ConceptRow implements Serializable {
 		else cellList.add(new Cell(drug, confidence));
 	}
 	
-	public Cell getCellWithId(int drug) {
+	public Cell getCellWithId(String drug) {
 		for(Cell cell: cellList) {
 			
-			if(cell.getDrug() == drug) {
+			if(cell.getDrug().equals(drug)) {
 				return cell;
 			}
 		}
@@ -72,15 +72,15 @@ public class ConceptRow implements Serializable {
 		private static final long serialVersionUID = 1L;
 
 		// each cell contains drug Id and confidence level
-		private int drug;
+		private String drug;
 		private double confidence;
 
-		public Cell(int drug, double confidence) {
+		public Cell(String drug, double confidence) {
 			this.drug = drug;
 			this.confidence = confidence;
 		}
 
-		public int getDrug() {
+		public String getDrug() {
 			return drug;
 		}
 
@@ -104,7 +104,7 @@ public class ConceptRow implements Serializable {
 			if (getClass() != obj.getClass())
 				return false;
 			Cell other = (Cell) obj;
-			if (drug != other.drug)
+			if (drug.equals(other.drug))
 				return false;
 			return true;
 		}

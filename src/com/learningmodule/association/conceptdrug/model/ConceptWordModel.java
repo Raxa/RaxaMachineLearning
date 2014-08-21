@@ -5,16 +5,16 @@ package com.learningmodule.association.conceptdrug.model;
  */
 
 public class ConceptWordModel {
-	private Integer conceptId;
+	private String conceptId;
 	private String conceptWord;
 
-	public ConceptWordModel(Integer conceptId, String conceptWord) {
+	public ConceptWordModel(String conceptId, String conceptWord) {
 		super();
 		this.conceptId = conceptId;
 		this.conceptWord = conceptWord;
 	}
 
-	public Integer getConceptId() {
+	public String getConceptId() {
 		return conceptId;
 	}
 

@@ -28,8 +28,8 @@ public class PreProcessing {
 		// drug_id
 		// concept hashtable contains the value as the column index of concept
 		// attribute in instances
-		Hashtable<Integer, Integer> conceptTable = new Hashtable<Integer, Integer>();
-		Hashtable<Integer, Integer> drugTable = new Hashtable<Integer, Integer>();
+		Hashtable<String, Integer> conceptTable = new Hashtable<String, Integer>();
+		Hashtable<String, Integer> drugTable = new Hashtable<String, Integer>();
 
 		// nominal vector that contains all drugIds for the drug attribute in
 		// Instance
@@ -59,7 +59,7 @@ public class PreProcessing {
 				conceptTable.put(temp.getConceptId(), conceptCounter++);
 
 				// make a new attribute for every distinct concept_id found
-				attrib.addElement(new Attribute(Integer.toString(temp.getConceptId()), conceptValue));
+				attrib.addElement(new Attribute(temp.getConceptId(), conceptValue));
 			}
 
 			// if drug_id not already there is hash table insert it
@@ -68,7 +68,7 @@ public class PreProcessing {
 
 				// add new value to nominal vector of drugs as you find
 				// different drugs
-				drugs.addElement(Integer.toString(temp.getDrug()));
+				drugs.addElement(temp.getDrug());
 			}
 
 			// increase the counter for number of encounter_id's as you get a id
@@ -103,14 +103,14 @@ public class PreProcessing {
 				inst = new SparseInstance(conceptCounter + 1);
 
 				// set the value of drugattribute for instance
-				inst.setValue(drugAttribute, Integer.toString(temp.getDrug()));
+				inst.setValue(drugAttribute, temp.getDrug());
 				inst.setDataset(instances);
 			}
-			if (currentEncounterId == 0)
-				inst.setValue(drugAttribute, Integer.toString(temp.getDrug()));
-
+			if (currentEncounterId == 0) {
+				inst.setValue(drugAttribute, temp.getDrug());
+			}
 			// set the value of attribute for the concept as true
-			inst.setValue(conceptTable.get(temp.getConceptId()).intValue(), "true");
+			inst.setValue(conceptTable.get(temp.getConceptId()), "true");
 			currentEncounterId = temp.getEncounterId();
 		}
 		// filter the attributes and return the instances

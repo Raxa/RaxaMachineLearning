@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Raxa UMLS Search</title>
+</head>
+<script type="text/javascript">
+	var ws = null;
+	function sendMsg() {
+		console.log("changed")
+		var message = document.getElementById("query").value;
+		if (ws != null) {
+			ws.send('query:' + message);
+		}
+	};
+	function connect() {
+
+		if ("WebSocket" in window) {
+			console.log("WebSocket is supported by your Browser!");
+			// Let us open a web socket
+			ws = new WebSocket("ws://" + window.location.host
+					+ "/RaxaMachineLearning/ml/umls");
+			ws.onopen = function() {
+				// Web Socket is connected, send data using send()
+				console.log("connected");
+			};
+			ws.onmessage = function(evt) {
+				var msg = JSON.parse(evt.data);
+				//console.log("Message is received... \n" + msg);
+				printResults(msg)
+			};
+			ws.onclose = function() {
+				// websocket is closed.
+				console.log("Connection is closed...");
+			};
+		} else {
+			// The browser doesn't support WebSocket
+			alert("WebSocket NOT supported by your Browser!");
+		}
+	};
+	function printResults(result) {
+		console.log(result);
+		var str = "<div><h2>Disease</h2>";
+		str = str + "<div style=\"margin-left:45px;\"><b>" + result.disDef.name + " : </b>"
+				+ result.disDef.defination + "</div>";
+		str = str + "<div style=\"margin-left:45px;\"><b> Other Suggestions : </b>" + result.disease[1].value.name
+		for (var i = 2; i < result.disease.length && i < 20; i++) {
+			str = str + ", " + result.disease[i].value.name;
+		}
+		str = str + "</div>";
+		str = str + "</div>";
+		document.getElementById("disease").innerHTML = str;
+		str = "<div><h2>Drugs</h2><ul>";
+		for (var i = 0; i < result.drugs.length && i < 25; i++) {
+			str = str + "<li>"
+			str = str + result.drugs[i].generic
+			str = str + "<br>May Treat : " + result.drugs[i].mayTreat[0].name;
+			for (var j = 1; j < result.drugs[i].mayTreat.length; j++) {
+				str = str + ", " + result.drugs[i].mayTreat[j].name;
+			}
+			str = str + "<br>Available Forms : <ul>";
+			for (var j = 0; j < result.drugs[i].drugs.length; j++) {
+				str = str + "<li>" + result.drugs[i].drugs[j].value.name
+						+ "</li>";
+			}
+			str = str + "</ul>"
+			
+			str = str + "</li>"
+		}
+		str = str + "</ul></div>";
+		document.getElementById("drugs").innerHTML = str;
+
+	};
+</script>
+</head>
+<body onload="connect()">
+	<input type="text" size="35" style="font-size: 25px" id="query"
+		onkeydown="if (event.keyCode == 13) sendMsg()" />
+	<button id="go" style="height: 40px" onclick="sendMsg()"
+		style="font-size: 15px">GO</button>
+	<div id="disease"></div>
+	<div id="drugs"></div>
+</body>
+</html>

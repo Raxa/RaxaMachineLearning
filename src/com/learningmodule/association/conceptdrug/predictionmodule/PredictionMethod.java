@@ -45,10 +45,10 @@ public class PredictionMethod {
 		// get the list of concepts IDs using Levenshtein Search given the
 		// query.
 		LinkedList<LevenshteinResults> searchResults = dictonary.search(query, 2);
-
+		log.info("dictonary search size:" + searchResults.size());
 		// for each conceptId in each Levenshtein word Match
 		for (LevenshteinResults result : searchResults) {
-			for (Integer concept : result.getConcepts()) {
+			for (String concept : result.getConcepts()) {
 
 				// get the list of drugsIDs for each conceptId from prediction
 				// matrix
@@ -58,7 +58,7 @@ public class PredictionMethod {
 						// set the confidence for this drug multiplied by it
 						// weight from approximate string search
 						//System.out.println(drug + "," + drug.getConfidence());
-						log.info(drug.toString());
+						//log.info(drug.toString());
 						
 						drug.setConfidence(drug.getConfidence() * result.getWeight());
 						boolean found = false;
@@ -66,7 +66,7 @@ public class PredictionMethod {
 						// if drug already present in the list set the new
 						// confidence
 						for (ConceptDrugPredictionResult tmp : results) {
-							if (tmp.getDrug().getDrugId() == (drug.getDrug())) {
+							if (tmp.getDrug().getDrugId().equals(drug.getDrug())) {
 								tmp.setConfidence(drug.getConfidence() + tmp.getConfidence()
 										- (drug.getConfidence() * tmp.getConfidence()));
 
@@ -111,7 +111,7 @@ public class PredictionMethod {
 		results = ConceptNameDatabaseOperation.getTags(results, learningInterface);
 
 		// get the linked list of drugs from result drugIDs
-		return DrugTableOperation.search(results, learningInterface);
+		return DrugTableOperation.addDrugInfo(results, learningInterface);
 	}
 
 	/*
@@ -119,9 +119,9 @@ public class PredictionMethod {
 	 * prediction matrix (For Debuging purpose)
 	 */
 	public void getAllConceptsInMatrix() {
-		LinkedList<Integer> conceptIds = matrix.getNonEmptyConcepts();
+		LinkedList<String> conceptIds = matrix.getNonEmptyConcepts();
 		String str = "( ";
-		for (Integer itr : conceptIds) {
+		for (String itr : conceptIds) {
 			str = str + itr + ", ";
 		}
 		str = str + ")";

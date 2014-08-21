@@ -5,6 +5,7 @@ import java.util.LinkedList;
 import com.learningmodule.association.conceptdrug.model.ConceptNameModel;
 import com.learningmodule.association.conceptdrug.model.ConceptWordModel;
 import com.learningmodule.association.conceptdrug.model.EncounterIdConceptDrug;
+import com.learningmodule.association.conceptdrug.multifeature.EncounterIdConceptFeaturesDrugModel;
 
 public interface ConceptDrugDatabaseInterface {
 
@@ -26,12 +27,19 @@ public interface ConceptDrugDatabaseInterface {
 	/*
 	 * Method to get the list of conceptId and concept_name for given list of conceptId(integer)
 	 */
-	public LinkedList<ConceptNameModel> getConceptIdNameByConceptIds(LinkedList<Integer> conceptIds);
+	
+	public LinkedList<EncounterIdConceptFeaturesDrugModel> getDataByConceptIds(LinkedList<String> ids);
+
+	/*
+	 * Method to get the list of conceptId and concept_name for given list of conceptId(integer)
+	 */
+	
+	public LinkedList<ConceptNameModel> getConceptIdNameByConceptIds(LinkedList<String> conceptIds);
 
 	/*
 	 * Method to get the list of Drugs for given drugIds(integers)
 	 */
-	public LinkedList<AbstractDrugModel> getDrugInfoByDrugIds(LinkedList<Integer> conceptIds);
+	public LinkedList<AbstractDrugModel> getDrugInfoByDrugIds(LinkedList<String> conceptIds);
 
 	/*
 	 * Method to get the list of all conceptId and concept_words

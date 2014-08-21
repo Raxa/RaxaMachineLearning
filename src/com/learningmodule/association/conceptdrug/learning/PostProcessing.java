@@ -52,10 +52,10 @@ public class PostProcessing {
 	/*
 	 * Method to save the final Prediction matrix
 	 */
-	private static void saveResults(PredictionMatrix matrix, String matrixFileName) {
+	public static void saveResults(PredictionMatrix matrix, String matrixFileName) {
 		try {
 			String path = PostProcessing.class.getResource("/").getFile();
-			FileOutputStream saveFile = new FileOutputStream(path + matrixFileName);
+			FileOutputStream saveFile = new FileOutputStream(path + "files/" + matrixFileName);
 			ObjectOutputStream save = new ObjectOutputStream(saveFile);
 			save.writeObject(matrix);
 			save.close();
@@ -140,9 +140,9 @@ public class PostProcessing {
 				for (int j = 0; j < premises.items().length - 1; j++) {
 					if (premises.itemAt(j) != -1) {
 						// add a new cell in the Prediction Matrix
-						matrix.addCell(Integer.parseInt((insts.attribute(j)).name()),
-								Integer.parseInt(drug.value(consequences.itemAt(consequences
-										.items().length - 1))), conf);
+						matrix.addCell((insts.attribute(j)).name(),
+								drug.value(consequences.itemAt(consequences
+										.items().length - 1)), conf);
 					}
 				}
 			}

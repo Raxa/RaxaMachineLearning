@@ -7,7 +7,7 @@ import com.learningmodule.association.conceptdrug.model.ConceptNameModel;
 import com.learningmodule.association.conceptdrug.model.ConceptDrugPredictionResult;
 
 /*
- * class that implements methods operating on table concept_name in OpenMRS
+ * class that fetch the concept name from database interface and add names to tag in results
  */
 
 public class ConceptNameDatabaseOperation {
@@ -15,10 +15,13 @@ public class ConceptNameDatabaseOperation {
 	// method to get the list of tags for each drug result
 	public static LinkedList<ConceptDrugPredictionResult> getTags(
 			LinkedList<ConceptDrugPredictionResult> results,
-			ConceptDrugDatabaseInterface learningInterface) {
-		LinkedList<ConceptNameModel> concepts = learningInterface
+			ConceptDrugDatabaseInterface learningDataInterface) {
+
+		// get the list of conceptId and conceptNames from database Interface
+		LinkedList<ConceptNameModel> concepts = learningDataInterface
 				.getConceptIdNameByConceptIds(getIds(results));
 
+		// loop adds the concepts names to tags in results
 		for (ConceptNameModel concept : concepts) {
 			for (ConceptDrugPredictionResult result : results) {
 				if (result.hasConcept(concept.getConceptId())) {
@@ -32,12 +35,12 @@ public class ConceptNameDatabaseOperation {
 
 	/*
 	 * method to get the string that has to be put in SQL query which has all
-	 * conceptId saparted by comma
+	 * conceptId separated by comma
 	 */
-	private static LinkedList<Integer> getIds(LinkedList<ConceptDrugPredictionResult> results) {
-		LinkedList<Integer> ids = new LinkedList<Integer>();
+	private static LinkedList<String> getIds(LinkedList<ConceptDrugPredictionResult> results) {
+		LinkedList<String> ids = new LinkedList<String>();
 		for (ConceptDrugPredictionResult result : results) {
-			for (Integer id : result.getConceptIds()) {
+			for (String id : result.getConceptIds()) {
 				ids.add(id);
 			}
 		}

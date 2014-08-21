@@ -5,9 +5,9 @@ package com.learningmodule.association.conceptdrug.model;
  */
 public class EncounterIdConceptDrug {
 	private int id;
-	private int drug, conceptId;
+	private String drug, conceptId;
 	
-	public EncounterIdConceptDrug(int id, int drug, int conceptId) {
+	public EncounterIdConceptDrug(int id, String drug, String conceptId) {
 		super();
 		this.id = id;
 		this.drug = drug;
@@ -21,16 +21,16 @@ public class EncounterIdConceptDrug {
 		this.id = id;
 	}
 	
-	public int getDrug() {
+	public String getDrug() {
 		return drug;
 	}
-	public void setDrug(int drug) {
+	public void setDrug(String drug) {
 		this.drug = drug;
 	}
-	public int getConceptId() {
+	public String getConceptId() {
 		return conceptId;
 	}
-	public void setConceptId(int conceptId) {
+	public void setConceptId(String conceptId) {
 		this.conceptId = conceptId;
 	}
 }

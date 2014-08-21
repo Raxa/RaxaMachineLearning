@@ -18,16 +18,16 @@ public class PredictionMatrix implements Serializable {
 
 	// Prediction matrix is a hastable with key as concept_id and value as
 	// ConceptRow
-	Hashtable<Integer, ConceptRow> rows;
+	Hashtable<String, ConceptRow> rows;
 
 	public PredictionMatrix(int noOfConcepts) {
-		rows = new Hashtable<Integer, ConceptRow>();
+		rows = new Hashtable<String, ConceptRow>();
 	}
 
 	/*
 	 * method to get the list of drugs that are associated with a drugId
 	 */
-	public LinkedList<Cell> getDrugs(int conceptId) {
+	public LinkedList<Cell> getDrugs(String conceptId) {
 		// if conceptId is present in the hash table then get the list of drugs
 		// related to it
 		if (rows.containsKey(conceptId)) {
@@ -39,11 +39,11 @@ public class PredictionMatrix implements Serializable {
 	/*
 	 * method to get all the concepts which are related to some drug
 	 */
-	public LinkedList<Integer> getNonEmptyConcepts() {
-		Enumeration<Integer> temp = rows.keys();
-		LinkedList<Integer> result = new LinkedList<Integer>();
+	public LinkedList<String> getNonEmptyConcepts() {
+		Enumeration<String> temp = rows.keys();
+		LinkedList<String> result = new LinkedList<String>();
 		while (temp.hasMoreElements()) {
-			Integer key = temp.nextElement();
+			String key = temp.nextElement();
 			if (!getDrugs(key).isEmpty()) {
 				result.add(key);
 			}
@@ -54,7 +54,7 @@ public class PredictionMatrix implements Serializable {
 	/*
 	 * method to add a new cell to Prediction matrix
 	 */
-	public void addCell(int concept, int drug, double conf) {
+	public void addCell(String concept, String drug, double conf) {
 		// if concept is already present in hast table put a new key value pair
 		// with key as this concept
 		if (!rows.containsKey(concept)) {
@@ -68,7 +68,7 @@ public class PredictionMatrix implements Serializable {
 	public String toString() {
 		String result = "";
 		int count = 0;
-		Enumeration<Integer> keys = rows.keys();
+		Enumeration<String> keys = rows.keys();
 		while (keys.hasMoreElements()) {
 			result = result + rows.get(keys.nextElement()).toString() + "\n";
 			count++;

@@ -9,9 +9,9 @@ import java.util.Set;
 public class LevenshteinResults {
 	private String name;
 	private double weight;
-	private Set<Integer> conceptIds;
+	private Set<String> conceptIds;
 
-	public LevenshteinResults(String name, int distance, int maxCost, Set<Integer> concepts) {
+	public LevenshteinResults(String name, int distance, int maxCost, Set<String> concepts) {
 		this.name = name;
 		
 		// set the weight given Levenshtein Distance as the below formula
@@ -27,7 +27,7 @@ public class LevenshteinResults {
 		return this.weight;
 	}
 
-	public Set<Integer> getConcepts() {
+	public Set<String> getConcepts() {
 		return this.conceptIds;
 	}
 }

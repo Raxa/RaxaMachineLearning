@@ -1,11 +1,12 @@
 package com.learningmodule.association.conceptdrug;
 
+import java.io.IOException;
 import java.util.LinkedList;
 
 import com.learningmodule.association.conceptdrug.learning.LearningMethod;
 import com.learningmodule.association.conceptdrug.predictionmodule.PredictionMethod;
 import com.machine.learning.interfaces.LearningModuleInterface;
-import com.raxa.association.ConceptDrugDatabaseInput;
+import com.machine.learning.request.SearchAttribute;
 
 /*
  * Machine Learning Module for the Association rule finding
@@ -32,27 +33,45 @@ public class ConceptDrugAssociationModule implements LearningModuleInterface {
 		this.conceptDrugLearningInterface = conceptDrugReleationLearningInterface;
 		conceptDrugLeanrning = new LearningMethod(
 				conceptDrugReleationLearningInterface.getMatrixFileName());
-		conceptDrugPrediction = new PredictionMethod(conceptDrugLeanrning.getMatrix(),
-				conceptDrugReleationLearningInterface);
+		try {
+			//conceptDrugLeanrning.learn(conceptDrugLearningInterface);
+			conceptDrugPrediction = new PredictionMethod(conceptDrugLeanrning.getMatrix(),
+					conceptDrugReleationLearningInterface);
+		} catch (Exception e) {
+			conceptDrugLeanrning.learn(conceptDrugLearningInterface);
+			try {
+				conceptDrugPrediction = new PredictionMethod(conceptDrugLeanrning.getMatrix(),
+						conceptDrugReleationLearningInterface);
+			} catch (IOException e1) {
+				e1.printStackTrace();
+			}
+			e.printStackTrace();
+		}
 	}
 
 	@Override
 	public void learn() {
 		conceptDrugLeanrning.learn(conceptDrugLearningInterface);
-		conceptDrugPrediction.setPredictionMatrix(conceptDrugLeanrning.getMatrix());
+		try {
+			conceptDrugPrediction.setPredictionMatrix(conceptDrugLeanrning.getMatrix());
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		// System.out.println(conceptDrugLeanrning.getMatrix());
 	}
 
 	@Override
-	public LinkedList<PredictionResult> predict(String query) {
+	public LinkedList<PredictionResult> predict(String query, SearchAttribute[] features) {
 		return conceptDrugPrediction.predict(query);
 	}
 
-	public static void main(String[] args) {
+	/*public static void main(String[] args) {
 		ConceptDrugAssociationModule module = new ConceptDrugAssociationModule(
-				new ConceptDrugDatabaseInput());
-		module.predict("");
-		module.predict("asthma");
-		// module.learn();
-	}
+				new OpenMRSConceptDrugDatabaseInput());
+		//module.learn();
+		//module.predict("");
+		module.predict("anemia", new SearchAttribute[0]);
+		//module.learn();
+	}*/
 }

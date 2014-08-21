@@ -15,6 +15,8 @@ import org.apache.log4j.Logger;
 import com.google.gson.Gson;
 import com.learningmodule.association.conceptdrug.PredictionResult;
 import com.machine.learning.LearningModulesPool;
+import com.machine.learning.request.Request;
+import com.machine.learning.request.SearchQueryRequest;
 
 /*
  * Class implementing the WebSocket Interface
@@ -23,11 +25,13 @@ import com.machine.learning.LearningModulesPool;
 @ServerEndpoint(value = "/ml/search")
 public class SearchSocket {
 
-	private Gson gson = new Gson();
+	private static Gson gson = new Gson();
 	private static Logger log = Logger.getLogger(SearchSocket.class);
 	private Session session;
-	//public static LearningModuleInterface algo = new ConceptDrugAssociationModule(
-		//	new ConceptDrugLearningModule());
+
+	// public static LearningModuleInterface algo = new
+	// ConceptDrugAssociationModule(
+	// new ConceptDrugLearningModule());
 
 	@OnOpen
 	public void start(Session session) {
@@ -46,19 +50,20 @@ public class SearchSocket {
 	 */
 	@OnMessage
 	public void onMsg(String query) {
-		// split the msg around ':' character
-		final String[] strings = query.split(":");
-		 System.out.println(query);
-		 log.debug(query);
-		// if the string has query before ':'
-		if (strings[0].equals("query") && strings.length > 1) {
+		System.out.println(query);
+		log.debug(query);
+		Request req = gson.fromJson(query, Request.class);
+
+		if (req.getSearchRequest() != null) {
 
 			// send the results to client for search string
-			sendResults(strings[1]);
+			sendResults(req.getSearchRequest());
 
-		} else if (strings[0].equals("learn")) {
+		} else if (req.getLearningRequest() != null
+				&& req.getLearningRequest().getLearningKey() == "raxalearn") {
 			// if client commands to learn, start a new thread to run the
 			// learning algo.
+
 			new Thread(new Runnable() {
 
 				@Override
@@ -70,12 +75,13 @@ public class SearchSocket {
 		}
 	}
 
-	public void sendResults(String query) {
+	public void sendResults(SearchQueryRequest query) {
 
 		try {
 			// get the predicitions, convert the results into Json String and
 			// send to the client
-			session.getBasicRemote().sendText(getJson(LearningModulesPool.predict(query)));
+			session.getBasicRemote().sendText(
+					getJson(LearningModulesPool.predict(query.getQuery(), query.getFeatures())));
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -97,5 +103,11 @@ public class SearchSocket {
 		System.out.println(result);
 		log.debug(result);
 		return result;
+	}
+
+	public static void main(String[] args) {
+		String msg = "{searchRequest: { query: 'asthma', features:[{name: 'age', value: '24'}] }}";
+		Request req = gson.fromJson(msg, Request.class);
+		System.out.println(req);
 	}
 }

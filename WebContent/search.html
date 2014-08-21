@@ -8,13 +8,19 @@
 	var ws = null;
 	function sendMsg() {
 		console.log("changed")
-		var message = document.getElementById("query").value;
+		var message = "{ searchRequest:{ query : '"
+				+ document.getElementById("query").value + "', features: [";
+		if (document.getElementById("age").value != "") {
+			message = message + "{ name: 'age', value:'"
+					+ document.getElementById("age").value + "'}";
+		}
+		message = message + "]}}";
 		if (ws != null) {
-			ws.send('query:' + message);
+			ws.send(message);
 		}
 	}
 	function learn() {
-		
+
 		if (ws != null) {
 			ws.send('learn:');
 		}
@@ -24,7 +30,8 @@
 		if ("WebSocket" in window) {
 			console.log("WebSocket is supported by your Browser!");
 			// Let us open a web socket
-			ws = new WebSocket("ws://" + window.location.host + "/RaxaMachineLearning/ml/search");
+			ws = new WebSocket("ws://" + window.location.host
+					+ "/RaxaMachineLearning/ml/search");
 			ws.onopen = function() {
 				// Web Socket is connected, send data using send()
 				console.log("connected");
@@ -46,10 +53,12 @@
 	function printResults(result) {
 		console.log(result);
 		var str = "<ul>";
-		for(var i=0;i<result.length;i++) {
-			str = str + "<li><div> Drug Name: <b>" + result[i].drug.name + "</b>, Drug Generic: <b>" + result[i].drug.generic + "</b></div><div>Tags: "
+		for (var i = 0; i < result.length; i++) {
+			str = str + "<li><div> Drug Name: <b>" + result[i].drug.name
+					+ "</b>, Drug Generic: <b>" + result[i].drug.generic
+					+ "</b></div><div>Tags: "
 			str = str + "<u>" + result[i].tags[0] + "</u>";
-			for(var j=1;j<result[i].tags.length;j++) {
+			for (var j = 1; j < result[i].tags.length; j++) {
 				str = str + ", <u>" + result[i].tags[j] + "</u>";
 			}
 			str = str + "</div></li>";
@@ -60,10 +69,11 @@
 </script>
 </head>
 <body onload="connect()">
-	<input type="text" size="35" style="font-size:25px" id="query" onkeyup="sendMsg()">
-	<button id="learn" onclick="learn()">
-		Learn
-	</button>
+	<input type="text" size="35" style="font-size: 25px" id="query">
+	<!--  onkeyup="sendMsg()" -->
+	<input type="number" size="35" style="font-size: 25px" id="age" min="1">
+	<button id="learn" onclick="sendMsg()">search</button>
+	<button id="learn" onclick="learn()">Learn</button>
 	<h2>Results</h2>
 	<p id="results"></p>
 </body>

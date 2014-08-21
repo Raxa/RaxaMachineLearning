@@ -25,7 +25,7 @@ public class DatabaseConceptDictionaryCollector {
 				// create a linked list of ConceptWordModel object
 				LinkedList<ConceptWordModel> data = new LinkedList<ConceptWordModel>();
 				while (rs.next()) {
-					data.add(new ConceptWordModel( rs.getInt(2), rs.getString(1)));
+					data.add(new ConceptWordModel( rs.getString(2), rs.getString(1)));
 				}
 				return data;
 			} catch (SQLException e1) {

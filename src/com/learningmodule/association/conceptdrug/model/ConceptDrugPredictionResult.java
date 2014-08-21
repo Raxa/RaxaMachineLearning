@@ -22,12 +22,12 @@ public class ConceptDrugPredictionResult implements PredictionResult {
 	private LinkedList<String> tags;
 
 	// conceptsId of concepts drug realted to
-	private HashSet<Integer> conceptIds;
+	private HashSet<String> conceptIds;
 
-	public ConceptDrugPredictionResult(int drug, double confidence) {
+	public ConceptDrugPredictionResult(String drug, double confidence) {
 		this.drug = new DrugModel(drug);
 		this.confidence = confidence;
-		this.conceptIds = new HashSet<Integer>();
+		this.conceptIds = new HashSet<String>();
 		this.tags = new LinkedList<String>();
 	}
 
@@ -64,18 +64,18 @@ public class ConceptDrugPredictionResult implements PredictionResult {
 		this.tags.add(tag);
 	}
 
-	public HashSet<Integer> getConceptIds() {
+	public HashSet<String> getConceptIds() {
 		return conceptIds;
 	}
 
 	/*
 	 * method to add concept Ids related to the drug result
 	 */
-	public void addConceptId(Integer conceptId) {
+	public void addConceptId(String conceptId) {
 		this.conceptIds.add(conceptId);
 	}
 
-	public boolean hasConcept(Integer conceptId) {
+	public boolean hasConcept(String conceptId) {
 		return conceptIds.contains(conceptId);
 	}
 

@@ -17,16 +17,16 @@ public class DrugModel implements AbstractDrugModel {
 	private String uuid;
 
 	// commercial Id of drug
-	private int drugCommercialId;
+	private String drugCommercialId;
 
 	// drug Id
-	private int drugId;
+	private String drugId;
 
-	public DrugModel(int drugId) {
+	public DrugModel(String drugId) {
 		this.drugId = drugId;
 	}
 
-	public DrugModel(String name, String generic, String uuid, int drugCommercialId, int drugId) {
+	public DrugModel(String name, String generic, String uuid, String drugCommercialId, String drugId) {
 		this.name = name;
 		this.generic = generic;
 		this.uuid = uuid;
@@ -58,21 +58,21 @@ public class DrugModel implements AbstractDrugModel {
 		this.uuid = uuid;
 	}
 
-	public int getDrugCommercialId() {
+	public String getDrugCommercialId() {
 		return drugCommercialId;
 	}
 
-	public void setDrugCommercialId(int drugCommercialId) {
+	public void setDrugCommercialId(String drugCommercialId) {
 		this.drugCommercialId = drugCommercialId;
 	}
 
 	@Override
-	public int getDrugId() {
+	public String getDrugId() {
 		return drugId;
 	}
 
 	@Override
-	public void setDrugId(int drugId) {
+	public void setDrugId(String drugId) {
 		this.drugId = drugId;
 	}
 
