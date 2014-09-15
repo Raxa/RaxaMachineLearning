@@ -2,11 +2,25 @@ package com.learningmodule.association.conceptdrug.multifeature;
 
 import java.util.Arrays;
 
+/*
+ * Class that models medical records
+ */
+
 public class EncounterIdConceptFeaturesDrugModel {
+	
+	// encounter id of medical record
 	private int id;
+	
+	// conceptId(disease/diagnosis)
 	private String conceptId;
+	
+	// drug prescribed
 	private String drugId;
+	
+	// other feature related to record like age, location of patient etc.
 	private FeatureValue[] featuresValues;
+	
+	// number of feature;
 	private int noOfFeatures;
 
 	public EncounterIdConceptFeaturesDrugModel(int id, String conceptId, String drugId,

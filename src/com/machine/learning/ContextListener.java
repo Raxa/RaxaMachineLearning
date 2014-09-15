@@ -8,6 +8,8 @@ import org.apache.log4j.Logger;
 import com.learningmodule.association.conceptdrug.ConceptDrugAssociationModule;
 import com.learningmodule.association.conceptdrug.multifeature.ConceptDrugLearningMultiFeatureModule;
 import com.pacemaker.association.PaceMakeConceptDrugDatabaseInput;
+import com.raxa.association.OpenMRSConceptDrugDatabaseInterface;
+
 /*
  * class that is used add modules in Learning Modules Pool on the starting of server
  */
@@ -26,8 +28,8 @@ public class ContextListener implements ServletContextListener {
 	 */
 	@Override
 	public void contextInitialized(ServletContextEvent arg0) {
-
-		// add the ConceptDrugAssociationModule with OpenMRS database Interface
+		
+		// add the ConceptDrugLearningMultiFeatureModule with pace maker database interface
 		LearningModulesPool.addLearningModule(new ConceptDrugLearningMultiFeatureModule(
 				new PaceMakeConceptDrugDatabaseInput()));
 		LearningSchedular.startSchedular();

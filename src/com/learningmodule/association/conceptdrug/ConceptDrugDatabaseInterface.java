@@ -25,7 +25,8 @@ public interface ConceptDrugDatabaseInterface {
 	public LinkedList<EncounterIdConceptDrug> getData();
 
 	/*
-	 * Method to get the list of conceptId and concept_name for given list of conceptId(integer)
+	 * Method to get the medical records with given list of concepts Ids contaning encounterId, conceptId, DrugId,
+	 * and feature related to medical records like age of patient, location of doctor/patient etc.
 	 */
 	
 	public LinkedList<EncounterIdConceptFeaturesDrugModel> getDataByConceptIds(LinkedList<String> ids);

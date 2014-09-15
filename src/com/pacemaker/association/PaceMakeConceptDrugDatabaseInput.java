@@ -84,6 +84,10 @@ public class PaceMakeConceptDrugDatabaseInput implements ConceptDrugDatabaseInte
 		return null;
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * @see com.learningmodule.association.conceptdrug.ConceptDrugDatabaseInterface#getDataByConceptIds(java.util.LinkedList)
+	 */
 	@Override
 	public LinkedList<EncounterIdConceptFeaturesDrugModel> getDataByConceptIds(LinkedList<String> ids) {
 
@@ -103,6 +107,7 @@ public class PaceMakeConceptDrugDatabaseInput implements ConceptDrugDatabaseInte
 								+ " && medication.patient_guid = patient.guid;");
 
 				try {
+					// create Age feature with type integer
 					Feature ageFeature = new Feature("age", Feature.INTEGERTYPE,
 							new Feature.DistanceCalculator() {
 
@@ -120,13 +125,19 @@ public class PaceMakeConceptDrugDatabaseInput implements ConceptDrugDatabaseInte
 									}
 								}
 							});
+					
+					// create State feature with type string
 					Feature stateFeature = new Feature("state", Feature.STRINGTYPE);
 					LinkedList<EncounterIdConceptFeaturesDrugModel> data = new LinkedList<EncounterIdConceptFeaturesDrugModel>();
 
 					while (rs.next()) {
+						
+						// set the age feature value and state feature value of record
 						FeatureValue[] values = new FeatureValue[2];
 						values[0] = new FeatureValue(ageFeature, getAge(rs.getString(4)));
 						values[1] = new FeatureValue(stateFeature, rs.getString(5));
+						
+						// add the medical record with encounter id, conceptId, drugId, and feature values 
 						data.add(new EncounterIdConceptFeaturesDrugModel(rs.getInt(1), rs
 								.getString(3), rs.getString(2), values));
 					}

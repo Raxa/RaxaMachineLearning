@@ -1,6 +1,5 @@
 package com.learningmodule.association.conceptdrug.multifeature;
 
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashSet;
@@ -29,11 +28,17 @@ public class PredictionMethod {
 	// minConfidence for association rules
 	private double minConfidence = 0.3;
 
+	/*
+	 * constructor with database Interface as arguments;
+	 */
 	public PredictionMethod(ConceptDrugDatabaseInterface databaseInterface) {
 		this.databaseInterface = databaseInterface;
 		dictionary = new LevenshteinSearch(databaseInterface);
 	}
 
+	/*
+	 * Constructor with min support, min confidence and database interface
+	 */
 	public PredictionMethod(int minSupport, double minConfidence, ConceptDrugDatabaseInterface databaseInterface) {
 		this.databaseInterface = databaseInterface;
 		dictionary = new LevenshteinSearch(databaseInterface);
@@ -41,12 +46,16 @@ public class PredictionMethod {
 		this.minConfidence = minConfidence;
 	}
 
+	/*
+	 * Prediction Results for a given query and search attributes
+	 */
 	public LinkedList<PredictionResult> predict(String query, SearchAttribute[] features) {
 
-		System.out.println(Arrays.toString(features));
+		//System.out.println(Arrays.toString(features));
 
 		LinkedList<LevenshteinResults> list = dictionary.search(query, 0);
 
+		// create a list of concepts ids from dictonary results
 		LinkedList<String> ids = new LinkedList<String>();
 		for (LevenshteinResults res : list) {
 			for (String concept : res.getConcepts()) {
@@ -54,7 +63,10 @@ public class PredictionMethod {
 			}
 		}
 
+		// get the medical records with the list of concept ids
 		LinkedList<EncounterIdConceptFeaturesDrugModel> data = databaseInterface.getDataByConceptIds(ids);
+		
+		// create set of unique drugs and concepts from medical records
 		HashSet<String> drugs = new HashSet<String>();
 		HashSet<String> concepts = new HashSet<String>();
 		for (EncounterIdConceptFeaturesDrugModel item : data) {
@@ -70,22 +82,32 @@ public class PredictionMethod {
 
 		LinkedList<ConceptDrugPredictionResult> results = new LinkedList<ConceptDrugPredictionResult>();
 
+		// for every pair of concept and drug in set of conceptIds and drugs
 		for (String concept : concepts) {
 			for (String drug : drugs) {
+				
+				// get the confidence level for this concept drug pair
 				double conf = getConf(data, concept, features, drug);
 				// System.out.println(conf + ", " + concept + ", " + drug);
+				
+				// if confidence is greater then min confidence level add the drug in results
 				if (conf > minConfidence) {
+					
+					// increase the weight of drug if its already present in list of results
 					conf = conf * getWeight(list, concept);
 					boolean found = false;
 					for (ConceptDrugPredictionResult temp : results) {
 						if (temp.getDrug().getDrugId().equals(drug)) {
 							found = true;
+							
+							// increase the weight using w = w1 + w2 - w1*w2
 							temp.setConfidence(conf + temp.getConfidence()
 									- (conf * temp.getConfidence()));
 							temp.addConceptId(concept);
 							break;
 						}
 					}
+					// add the drug in list of results case its not already present there
 					if (!found) {
 						ConceptDrugPredictionResult tmp = new ConceptDrugPredictionResult(drug,
 								conf);
@@ -117,6 +139,9 @@ public class PredictionMethod {
 
 	}
 
+	/*
+	 * method to get the weight of a conceptId from dictionary results
+	 */
 	public static double getWeight(LinkedList<LevenshteinResults> list, String conceptId) {
 		double weight = 0.0;
 		for (LevenshteinResults item : list) {
@@ -128,17 +153,32 @@ public class PredictionMethod {
 		}
 		return weight;
 	}
-
+	
+	/*
+	 * method to get the confidence of drug for given conceptId and searchAttributes 
+	 */
 	public double getConf(LinkedList<EncounterIdConceptFeaturesDrugModel> data, String conceptId,
 			SearchAttribute[] features, String drugId) {
+		
+		// support of itemset<conceptId, attributes, drugId>
 		double drugS = getSupport(data, conceptId, features, drugId);
+		
+		// support of itemset<conceptId, attributes>
 		double conceptS = getSupport(data, conceptId, features, null);
 		double conf = 0.0;
+		
+		// if support if itemset<conceptId, attribute, drugId> greater then minimum support
 		if (drugS >= (double) minSupport) {
+			
+			//confidence  = support itemset<conceptId, attributes, drugId> / support itemset<conceptid, attributes>
 			conf = drugS / conceptS;
 		}
 		for (int i = 0; i < features.length; i++) {
+			
+			// remove attribute at ith index to get subset of search attribute
 			SearchAttribute[] subSetFeatures = getSubSet(i, features);
+			
+			// get confidence of this subset of attribute and set it as confidence if its greater then previous
 			conf = max(conf, 0.9 * getConf(data, conceptId, subSetFeatures, drugId));
 		}
 
@@ -152,6 +192,9 @@ public class PredictionMethod {
 			return y;
 	}
 
+	/*
+	 * method that remove attributes at ith index from a set of attribute and reture subset
+	 */
 	public static SearchAttribute[] getSubSet(int index, SearchAttribute[] ats) {
 		SearchAttribute[] subset = new SearchAttribute[ats.length - 1];
 		for (int i = 0; i < index; i++) {
@@ -163,27 +206,42 @@ public class PredictionMethod {
 		return subset;
 	}
 
+	/*
+	 * method to get the support itemset<conceptId, attributes, drugId>
+	 */
 	public static double getSupport(LinkedList<EncounterIdConceptFeaturesDrugModel> data,
 			String conceptId, SearchAttribute[] features, String drugId) {
 		double sup = 0.0;
 		int preId = 0;
 		int curId;
+		
+		// for every medical records
 		for (EncounterIdConceptFeaturesDrugModel item : data) {
+			// current encounterId
 			curId = item.getId();
+			
+			// if current encounter id is not equal to previous encounterId and 
+			// drugId is either null or equal to the drugID in medical records
 			if (curId != preId && item.getConceptId().equals(conceptId)
 					&& (drugId == null || drugId.equals(item.getDrugId()))) {
+				
+				// Initialize the value of support for this record, 0.0 < support <= 1.0
 				double temp = 1.0;
+				
+				// for every search attribute and feature in record
 				for (SearchAttribute sa : features) {
 					for (FeatureValue df : item.getFeatures()) {
+						
+						// attribute is compatible with the feature
 						if (attributeIsFeature(sa, df.getFeature())) {
 							// System.out.println(sa.getValue() instanceof
 							// Integer);
 							try {
+								// calculate the distance of attribute value with feature value
 								temp = temp
 										* df.getDistance(new FeatureValue(df.getFeature(), sa
 												.getValue()));
-								// System.out.println("yo!" + temp + "," +
-								// df.getValue());
+								
 								preId = curId;
 							} catch (Exception e) {
 								e.printStackTrace();
@@ -194,6 +252,8 @@ public class PredictionMethod {
 				if (features.length == 0 || drugId == null) {
 					preId = curId;
 				}
+				
+				// add support for this record to total support for itemset
 				sup = sup + temp;
 				// System.out.println(sup + ", " + curId);
 			}
@@ -202,10 +262,17 @@ public class PredictionMethod {
 		return sup;
 	}
 
+	/*
+	 * Method to check search attribute is a Feature and has compatible types
+	 */
 	public static boolean attributeIsFeature(SearchAttribute at, Feature f) {
+		
+		// if feature name and attribute name are same
 		if (at.getName().equals(f.getFeatureName())) {
 			try {
 				// System.out.println(f.getFeatureType());
+				
+				// check if the type of attribute value is compatible with feature types
 				switch (f.getFeatureType()) {
 				case Feature.INTEGERTYPE:
 					if (at.getValue() instanceof String) {

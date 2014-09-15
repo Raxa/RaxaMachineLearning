@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <log4j:configuration>
 	<appender name="file" class="org.apache.log4j.RollingFileAppender">  
-		<param name="File" value="/home/piyush/Documents/RaxaMachineLearning.txt" />
+		<param name="File" value="/home/Documents/piyush/RaxaMachineLearning.txt" />
 		<param name="maxFileSize" value="5000KB" />
 		<param name="maxBackupIndex" value="500" />	 
 		<layout class="org.apache.log4j.PatternLayout">

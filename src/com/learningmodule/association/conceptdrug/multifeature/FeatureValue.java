@@ -1,7 +1,15 @@
 package com.learningmodule.association.conceptdrug.multifeature;
 
+/*
+ * class that models feature values
+ */
+
 public class FeatureValue {
+	
+	// Feature whose value is saved in this object
 	private Feature feature;
+	
+	// Value of Feature
 	private Object value;
 
 	public FeatureValue(Feature feature, Object value) {
@@ -12,6 +20,7 @@ public class FeatureValue {
 		}
 	}
 
+	// method to get distance of this feature value from feature value f1
 	public double getDistance(FeatureValue f1) throws Exception {
 		if (f1.getFeature().getFeatureName().equals(this.feature.getFeatureName())
 				&& f1.getFeature().getFeatureType() == this.feature.getFeatureType()) {

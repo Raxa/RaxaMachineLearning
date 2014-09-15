@@ -36,12 +36,15 @@ Ext.define('umlsApp.controller.controller', {
 	sendQuery : function() {
 		var x = Ext.getCmp('searchField');
 		console.log(x.getValue());
-		var msg = "{searchRequest : { query:" + x.getValue() + ", features: [" 
+		var msg = "{searchRequest : { query:'" + x.getValue() + "', features: [";
 		if(Ext.getCmp('age').getValue() != null && Ext.getCmp('age').getValue() != '' ) {
-			msg = msg + "{name: age, value: '" + Ext.getCmp('age').getValue() + "'} ";
+			msg = msg + "{name: 'age', value: '" + Ext.getCmp('age').getValue() + "'} ";
+			if(Ext.getCmp('state').getValue() != '') {
+				msg = msg + ", ";
+			}
 		}
 		if(Ext.getCmp('state').getValue() != '') {
-			msg = msg + "{name: state, value: '" + Ext.getCmp('state').getValue() + "'} ";
+			msg = msg + "{name: 'state', value: '" + Ext.getCmp('state').getValue() + "'} ";
 		}
 		msg = msg + "]}}";
 		ws.send(msg);
@@ -123,6 +126,7 @@ Ext.define('umlsApp.controller.controller', {
 			};
 			ws.onclose = function() {
 				// websocket is closed.
+				Ext.getCmp('mainView').setMasked(false);
 				console.log("Connection is closed...");
 			};
 		} else {
