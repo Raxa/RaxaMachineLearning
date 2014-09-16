@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<log4j:configuration>
+	<appender name="file" class="org.apache.log4j.RollingFileAppender">  
+		<param name="File" value="/home/Documents/piyush/RaxaMachineLearning.txt" />
+		<param name="maxFileSize" value="5000KB" />
+		<param name="maxBackupIndex" value="500" />	 
+		<layout class="org.apache.log4j.PatternLayout">
+			<param name="ConversionPattern" value="%d{dd MMM yyyy HH:mm:ss,SSS} %5p %t %c{1}:%L - %m%n" />
+		</layout>
+	</appender>
+   <logger name="org.apache">
+        <level value="error"/>
+        <appender-ref ref="file" />
+    </logger>
+    <logger name="org.google">
+        <level value="error"/>
+        <appender-ref ref="file" />
+    </logger>
+    <logger name="com.mysql">
+        <level value="error"/>
+        <appender-ref ref="file" />
+    </logger>
+    <logger name="weka">
+        <level value="error"/>
+        <appender-ref ref="file" />
+    </logger>
+    <root>
+        <priority value="debug"></priority>
+        <appender-ref ref="file" />
+    </root>	
+    
+</log4j:configuration>

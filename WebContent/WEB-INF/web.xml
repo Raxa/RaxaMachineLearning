@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app>
+	<servlet>
+		<servlet-name>raxaSearch</servlet-name>
+		<servlet-class>com.machine.learning.socket.SearchSocket</servlet-class>
+	</servlet>
+	<servlet>
+		<servlet-name>UmlsSearch</servlet-name>
+		<servlet-class>com.machine.learning.socket.UmlsSocket</servlet-class>
+	</servlet>
+	 <listener>
+        <listener-class>com.machine.learning.ContextListener</listener-class>
+    </listener> 
+</web-app>
